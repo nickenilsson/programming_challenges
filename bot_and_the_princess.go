@@ -4,7 +4,7 @@ import (
     "fmt"
     "bufio"
     "os"
-
+    "strconv"
 )
 
 type player struct{
@@ -15,37 +15,52 @@ type player struct{
 func parsePlayersFromStdIn() (player, player){
     scanner := bufio.NewScanner(os.Stdin)
     scanner.Scan()
-
+    gridSize, _ := strconv.Atoi(scanner.Text())
     var hero player
     var princess player
-    yPosition := 0
+    yPosition := gridSize - 1
     for scanner.Scan(){
         inputLine := scanner.Text()
         for xPosition,char := range(inputLine){
-            if char == 112{
+            if char == 109{
                 hero = player{xPosition,yPosition}
             }
-            if char == 109{
+            if char == 112{
                 princess = player{xPosition, yPosition}
             }
         }
-        yPosition += 1
+        yPosition -= 1
     }
     return hero, princess
 }
 
 func heroGetsPrincess(hero player, princess player){
     for {
-        switch{
-
+        if hero.xPosition < princess.xPosition{
+            hero.xPosition += 1
+            fmt.Println("RIGHT")
         }
+        if hero.xPosition > princess.xPosition{
+            hero.xPosition -= 1
+            fmt.Println("LEFT")
+        }
+        if hero.yPosition < princess.yPosition{
+            hero.yPosition += 1
+            fmt.Println("UP")
+        }
+        if hero.yPosition > princess.yPosition{
+            hero.yPosition -= 1
+            fmt.Println("DOWN")
+        }
+        if hero.xPosition == princess.xPosition && hero.yPosition == princess.yPosition{
+            break
+        }
+
     }
 }
 
 func main() {
  //Enter your code here. Read input from STDIN. Print output to STDOUT
-    p1, p2 := parsePlayersFromStdIn()
-    fmt.Println(p1)
-    fmt.Println(p2)
-
+    hero, princess := parsePlayersFromStdIn()
+    heroGetsPrincess(hero, princess)
 }
