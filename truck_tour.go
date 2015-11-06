@@ -31,13 +31,13 @@ func findStartingIndex(pumps []petrolPump) int {
     suitableStart := len(pumps)-1
     fuelDeficit := 0
     for i := len(pumps)-1; i >= 0; i-- {
-        if pumps[i].fuel - pumps[i].distanceNext < 0 {
-            fuelDeficit += pumps[i].fuel - pumps[i].distanceNext * -1
-        }else if pumps[i].fuel >= fuelDeficit {
+        pumpFuelDelta := pumps[i].fuel - pumps[i].distanceNext
+        if pumpFuelDelta + fuelDeficit >= 0{
             suitableStart = i
+            fuelDeficit = 0
+        }else{
+            fuelDeficit += pumpFuelDelta
         }
-        fmt.Println(pumps[i])
-        fmt.Println(fuelDeficit)
     }
     return suitableStart
 }
